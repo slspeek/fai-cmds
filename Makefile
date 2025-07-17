@@ -1,0 +1,34 @@
+SHELL=/bin/bash
+export PATH:=$(PWD)/bin:$(PATH)
+
+BUILDDIR=build
+FAI_CONFIG_SRC=https://github.com/slspeek/fai.git
+FAI_CONFIG=$(BUILDDIR)/fai-config
+FAI_ETC_BASE=fai-etc-dir
+FAI_ETC=$(BUILDDIR)/$(FAI_ETC_BASE)
+NFSROOT=$(BUILDDIR)/nfsroot
+
+clean:
+	sudo rm -rf $(BUILDDIR)
+
+init:
+	sudo apt-get update
+	sudo apt-get install extrepo
+	sudo extrepo enable fai
+	sudo apt-get update
+	sudo apt-get install fai-client fai-server
+
+$(BUILDDIR):
+	mkdir -p $(BUILDDIR)
+	
+$(BUILDDIR)/fai-cd-trixie.iso: $(NFSROOT)
+	sudo fai-cd -C $(FAI_ETC) -M  $(BUILDDIR)/fai-cd-trixie.iso
+
+$(FAI_CONFIG): $(BUILDDIR)
+	git clone --depth 1 $(FAI_CONFIG_SRC) $(FAI_CONFIG)
+
+$(FAI_ETC): $(BUILDDIR)
+	cp -rv $(FAI_ETC_BASE) $(BUILDDIR)/
+
+$(NFSROOT): $(FAI_CONFIG) $(FAI_ETC)
+	sudo fai-make-nfsroot -C $(FAI_ETC) -f
