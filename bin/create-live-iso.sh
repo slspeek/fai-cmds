@@ -3,13 +3,13 @@ set -e
 
 DESKTOP_ENVIRONMENT=$1
 LANGUAGE=$2
-TARGET_DIR=$3
-FAI_CONFIG_DIR=$4
-FAI_ETC=$5
-BUILD_DIR=$6
+FAI_CONFIG_DIR=$3
+FAI_ETC=$4
+BUILD_DIR=$5
+TARGET_DIR=$BUILD_DIR/live-${DESKTOP_ENVIRONMENT}
 
-if [ -z "$DESKTOP_ENVIRONMENT" ] || [ -z "$LANGUAGE" ] || [ -z "$TARGET_DIR" ] || [ -z "$FAI_CONFIG_DIR" ] || [ -z "$FAI_ETC" ] || [ -z "$BUILD_DIR" ]; then
-    echo "Usage: $0 <desktop_environment> <language> <target_dir> <fai_config_dir> <fai_etc> <build_dir>"
+if [ -z "$DESKTOP_ENVIRONMENT" ] || [ -z "$LANGUAGE" ] || [ -z "$FAI_CONFIG_DIR" ] || [ -z "$FAI_ETC" ] || [ -z "$BUILD_DIR" ]; then
+    echo "Usage: $0 <desktop_environment> <language> <fai_config_dir> <fai_etc> <build_dir>"
     exit 1
 fi
 cl="DEBIAN,TRIXIE64,AMD64,STANDARD,$LANGUAGE,CALAMARES,FAIBASE,${DESKTOP_ENVIRONMENT},XORG,DHCPC,DEMO,LIVEISO,LAST"
