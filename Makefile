@@ -11,10 +11,13 @@ NFSROOT=$(BUILDDIR)/nfsroot
 FAI_CD_TRIXIE=$(BUILDDIR)/fai-cd-trixie.iso
 GNOME_LIVE=$(BUILDDIR)/live-GNOME.iso
 
-.PHONY: clean init
+.PHONY: clean clean-config init
 
 clean:
 	sudo rm -rf $(BUILDDIR)
+
+clean-config:
+	rm -rf $(FAI_CONFIG)
 
 init:
 	sudo apt-get update
@@ -23,10 +26,10 @@ init:
 	sudo apt-get update
 	sudo apt-get install fai-client fai-server
 
-$(FAI_CD_TRIXIE): $(NFSROOT)
-	sudo fai-cd -C $(FAI_ETC) -M  $(BUILDDIR)/fai-cd-trixie.iso
+$(FAI_CD_TRIXIE):  $(FAI_CONFIG) $(NFSROOT)
+	@echo "Creating FAI CD Trixie ISO..."
+	sudo fai-cd -f -C $(FAI_ETC) -M  $(BUILDDIR)/fai-cd-trixie.iso
 
-.ONE_SHELL:
 $(FAI_CONFIG): 
 # 	@echo "Cloning FAI configuration repository..."
 # 	git clone --depth 1 $(FAI_CONFIG_SRC) $(FAI_CONFIG)
@@ -39,7 +42,7 @@ $(FAI_ETC): $(FAI_ETC_BASE)
 	mkdir -p $(BUILDDIR)
 	cp -rv $(FAI_ETC_BASE) $(BUILDDIR)/
 
-$(NFSROOT): $(FAI_CONFIG) $(FAI_ETC)
+$(NFSROOT): $(FAI_ETC)
 	@echo "Make NFS root directory..."	
 	sudo fai-make-nfsroot -C $(FAI_ETC) -f
 
