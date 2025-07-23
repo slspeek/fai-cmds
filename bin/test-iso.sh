@@ -33,6 +33,6 @@ virt-install \
         --video virtio \
         --cdrom $LIVE_ISO_PATH \
         --memory 3048 \
-        --vcpu 2 
+        --vcpu $(( $(nproc) / 2 )) 
 virsh destroy $VM_NAME || true
 virsh undefine $VM_NAME --remove-all-storage
