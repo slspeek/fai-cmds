@@ -2,6 +2,8 @@
 
 PACKAGES install-norec FULL
 nfs-common fai-nfsroot rpcbind
+libgraph-perl
+ripgrep
 rsync
 lshw procinfo
 dump reiserfsprogs xfsprogs xfsdump btrfs-progs

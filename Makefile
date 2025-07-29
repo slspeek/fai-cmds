@@ -4,7 +4,7 @@ export PATH:=$(PWD)/bin:$(PATH)
 BUILDDIR=build
 FAI_CONFIG_DIR=$(PWD)/../fai
 FAI_CONFIG_SRC=file://$(FAI_CONFIG_DIR)
-FAI_CONFIG=$(PWD)/$(BUILDDIR)/fai-config
+FAI_CONFIG=$(BUILDDIR)/fai-config
 FAI_ETC_BASE=fai-etc-dir
 FAI_ETC=$(BUILDDIR)/$(FAI_ETC_BASE)
 NFSROOT=$(BUILDDIR)/nfsroot
@@ -26,21 +26,21 @@ init:
 	sudo apt-get update
 	sudo apt-get install fai-client fai-server
 
-$(FAI_CD_TRIXIE):  $(FAI_CONFIG) $(NFSROOT)
-	@echo "Creating FAI CD Trixie ISO..."
-	sudo fai-cd -f -C $(FAI_ETC) -M  $(BUILDDIR)/fai-cd-trixie.iso
-
-$(FAI_CONFIG): 
-# 	@echo "Cloning FAI configuration repository..."
-# 	git clone --depth 1 $(FAI_CONFIG_SRC) $(FAI_CONFIG)
+$(FAI_CONFIG): $(shell find $(FAI_CONFIG_DIR) -type f)
 	@echo "Copying FAI configuration..."
 	mkdir -p $(BUILDDIR)
+	rm -rf $(FAI_CONFIG) || true
 	cp -r ${FAI_CONFIG_DIR} $(FAI_CONFIG)
 
-$(FAI_ETC): $(FAI_ETC_BASE)
+$(FAI_CD_TRIXIE):  $(FAI_CONFIG) $(NFSROOT)
+	@echo "Creating FAI CD Trixie ISO..."
+	sudo fai-cd -f -C $(FAI_ETC) -M $(BUILDDIR)/fai-cd-trixie.iso
+
+$(FAI_ETC): $(shell find $(FAI_ETC_BASE) -type f)
 	@echo "Copying FAI etc directory..."
 	mkdir -p $(BUILDDIR)
-	cp -rv $(FAI_ETC_BASE) $(BUILDDIR)/
+	rm -rf $(FAI_ETC) || true
+	cp -r $(FAI_ETC_BASE) $(BUILDDIR)/
 
 $(NFSROOT): $(FAI_ETC)
 	@echo "Make NFS root directory..."	
@@ -48,7 +48,7 @@ $(NFSROOT): $(FAI_ETC)
 
 $(GNOME_LIVE): $(FAI_CONFIG) $(FAI_ETC)
 	@echo "Creating GNOME live ISO..."
-	create-live-iso.sh GNOME DUTCH $(BUILDDIR)/live-install-dir $(FAI_CONFIG) $(FAI_ETC) $(BUILDDIR)
+	create-live-iso.sh GNOME DUTCH $(BUILDDIR)/live-install-dir $(PWD)/$(FAI_CONFIG) $(FAI_ETC) $(BUILDDIR)
 
 test-$(GNOME_LIVE): $(GNOME_LIVE)
 	@echo "Testing GNOME live ISO..."
