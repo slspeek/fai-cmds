@@ -26,6 +26,10 @@ init:
 	sudo apt-get update
 	sudo apt-get install fai-client fai-server
 
+fai-mirror:
+	sudo fai-mirror -C/home/tux/fai-cmds/fai-etc-dir -c"DEMO" -v /mirror/
+
+
 $(FAI_CONFIG): $(shell find $(FAI_CONFIG_DIR) -type f)
 	@echo "Copying FAI configuration..."
 	mkdir -p $(BUILDDIR)
