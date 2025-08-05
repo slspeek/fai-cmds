@@ -9,7 +9,7 @@ FAI_ETC_BASE=fai-etc-dir
 FAI_ETC=$(BUILDDIR)/$(FAI_ETC_BASE)
 NFSROOT=$(BUILDDIR)/nfsroot
 FAI_CD_TRIXIE=$(BUILDDIR)/fai-cd-trixie.iso
-GNOME_LIVE=$(BUILDDIR)/live-GNOME.iso
+GNOME_LIVE=$(BUILDDIR)/live-GNOME_CORE.iso
 
 .PHONY: clean clean-config init
 
@@ -50,14 +50,12 @@ $(NFSROOT): $(FAI_ETC)
 	@echo "Make NFS root directory..."	
 	sudo fai-make-nfsroot -C $(FAI_ETC) -f
 
-$(GNOME_LIVE): $(FAI_CONFIG) $(FAI_ETC)
-	@echo "Creating GNOME live ISO..."
-	create-live-iso.sh GNOME DUTCH $(BUILDDIR)/live-install-dir $(PWD)/$(FAI_CONFIG) $(FAI_ETC) $(BUILDDIR)
+$(BUILDDIR)/live-%.iso: $(FAI_CONFIG) $(FAI_ETC) $(NFSROOT)
+	@echo "Creating $* live ISO..."
+	rm -f build/live-$*.iso || true
+	create-live-iso.sh $* DUTCH $(PWD)/$(FAI_CONFIG) $(FAI_ETC) $(BUILDDIR)
 
-test-$(GNOME_LIVE): $(GNOME_LIVE)
-	@echo "Testing GNOME live ISO..."
-	test-iso.sh -i $(GNOME_LIVE)
+test-$(BUILDDIR)/live-%.iso: $(BUILDDIR)/live-%.iso
+	@echo "Testing live-$*.iso "
+	test-iso.sh -i $(BUILDDIR)/live-$*.iso
 
-test-$(FAI_CD_TRIXIE): $(FAI_CD_TRIXIE)
-	@echo "Testing FAI CD Trixie ISO..."
-	test-iso.sh -i $(FAI_CD_TRIXIE)

@@ -12,9 +12,11 @@ if [ -z "$DESKTOP_ENVIRONMENT" ] || [ -z "$LANGUAGE" ] || [ -z "$FAI_CONFIG_DIR"
     echo "Usage: $0 <desktop_environment> <language> <fai_config_dir> <fai_etc> <build_dir>"
     exit 1
 fi
-cl="DEBIAN,TRIXIE64,AMD64,STANDARD,$LANGUAGE,CALAMARES,FAIBASE,${DESKTOP_ENVIRONMENT},XORG,DHCPC,DEMO,LIVEISO,LAST"
-HOSTNAME="live-${DESKTOP_ENVIRONMENT}"
-echo "Installing FAI configuration for $HOSTNAME with classes: $cl"
+
+cl_unexpanded="DEBIAN,TRIXIE64,AMD64,STANDARD,$LANGUAGE,FIREFOX,FANCY_BASH_PROMPT,BASIC_CLI_TOOLS,LIBREOFFICE_WRITER,VLC,FAIBASE,${DESKTOP_ENVIRONMENT},DHCPC,TUX,LIVEISO,LAST" 
+cl=$(bin/fai-deps-wrapper.sh $FAI_CONFIG_DIR "$cl_unexpanded")
+HOSTNAME="live-${DESKTOP_ENVIRONMENT/_/-}"
+echo -e "Installing FAI configuration for $HOSTNAME with\nclasses: $cl"
 sudo LC_ALL=C fai -v -C ${FAI_ETC} dirinstall -u $HOSTNAME -c $cl  -s file://${FAI_CONFIG_DIR} ${TARGET_DIR} || true
 
 ISO_NAME="live-${DESKTOP_ENVIRONMENT}.iso"
