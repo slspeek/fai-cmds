@@ -52,10 +52,13 @@ $(NFSROOT): $(FAI_ETC)
 
 $(BUILDDIR)/live-%.iso: $(FAI_CONFIG) $(FAI_ETC) $(NFSROOT)
 	@echo "Creating $* live ISO..."
-	rm -f build/live-$*.iso || true
-	create-live-iso.sh $* DUTCH $(PWD)/$(FAI_CONFIG) $(FAI_ETC) $(BUILDDIR)
+	rm -f "build/live-$*.iso" || true
+	create-live-iso.sh "$*" DUTCH $(PWD)/$(FAI_CONFIG) $(FAI_ETC) $(BUILDDIR)
 
 test-$(BUILDDIR)/live-%.iso: $(BUILDDIR)/live-%.iso
-	@echo "Testing live-$*.iso "
-	test-iso.sh -i $(BUILDDIR)/live-$*.iso
+	@echo "Testing live-$*.iso"
+	test-iso.sh -i "$(BUILDDIR)/live-$*.iso"
 
+test-$(FAI_CD_TRIXIE): $(FAI_CD_TRIXIE)
+	@echo "Testing $(FAI_CD_TRIXIE)"
+	test-iso.sh -i $(FAI_CD_TRIXIE)
