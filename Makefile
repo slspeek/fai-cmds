@@ -1,6 +1,8 @@
 SHELL=/bin/bash
 export PATH:=$(PWD)/bin:$(PATH)
 
+LENIENT=1
+export LENIENT
 BUILDDIR=build
 FAI_CONFIG_DIR=$(PWD)/../fai
 FAI_CONFIG_SRC=file://$(FAI_CONFIG_DIR)
@@ -11,7 +13,7 @@ NFSROOT=$(BUILDDIR)/nfsroot
 FAI_CD_TRIXIE=$(BUILDDIR)/fai-cd-trixie.iso
 GNOME_LIVE=$(BUILDDIR)/live-GNOME_CORE.iso
 
-.PHONY: clean clean-config init
+.PHONY: clean clean-config init profiles
 
 clean:
 	sudo rm -rf $(BUILDDIR)
@@ -25,6 +27,10 @@ init:
 	sudo extrepo enable fai
 	sudo apt-get update
 	sudo apt-get install fai-client fai-server
+
+profiles: $(FAI_CONFIG)
+	@echo "Available profiles:"
+	@get-profiles.sh $(FAI_CONFIG) | sort
 
 fai-mirror:
 	sudo fai-mirror -C/home/tux/fai-cmds/fai-etc-dir -c"DEMO" -v /mirror/

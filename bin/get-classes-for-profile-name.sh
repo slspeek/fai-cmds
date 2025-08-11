@@ -9,12 +9,7 @@ if [ -z "$FAI_CONFIG" ] || [ -z "$NAME" ]; then
   exit 1
 fi
 
-cat $FAI_CONFIG/class/*.profile | \
-  awk '/^Name: / {for(i=2; i<=NF; i++){printf("%s", $i);\
-     if(i!=NF){printf(" ")}}} \
-     /^Classes: / \
-     {printf(":");for(i=2; i <=NF; i++){printf ("%s", $i);\
-     if(i!=NF){printf(" ")}}; print("")} '| \
+get-profiles.sh $FAI_CONFIG| \
      grep  "^$NAME:" | \
      cut -d: -f2- |tr ' ' ','
      
