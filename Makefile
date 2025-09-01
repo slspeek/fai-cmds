@@ -26,7 +26,7 @@ init:
 	sudo apt-get install extrepo
 	sudo extrepo enable fai
 	sudo apt-get update
-	sudo apt-get install fai-client fai-server
+	sudo apt-get install fai-client fai-server libgraph-perl
 
 profiles: $(FAI_CONFIG)
 	@echo "Available profiles:"
@@ -34,7 +34,6 @@ profiles: $(FAI_CONFIG)
 
 fai-mirror:
 	sudo fai-mirror -C/home/tux/fai-cmds/fai-etc-dir -c"DEMO" -v /mirror/
-
 
 $(FAI_CONFIG): $(shell find $(FAI_CONFIG_DIR) -type f)
 	@echo "Copying FAI configuration..."
