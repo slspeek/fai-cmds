@@ -11,6 +11,8 @@ FAI_ETC_BASE=fai-etc-dir
 FAI_ETC=$(BUILDDIR)/$(FAI_ETC_BASE)
 NFSROOT=$(BUILDDIR)/nfsroot
 FAI_CD=$(BUILDDIR)/fai-cd.iso
+FAI_CD_MIRROR=$(BUILDDIR)/fai-cd-mirror.iso
+MIRROR=$(BUILDDIR)/mirror
 GNOME_LIVE=$(BUILDDIR)/live-GNOME_CORE.iso
 
 .PHONY: clean clean-config init profiles
@@ -32,8 +34,17 @@ profiles: $(FAI_CONFIG)
 	@echo "Available profiles:"
 	@get-profiles.sh $(FAI_CONFIG) | sort
 
-fai-mirror:
-	sudo fai-mirror -C/home/tux/fai-cmds/fai-etc-dir -c"DEMO" -v /mirror/
+.ONESHELL:
+$(MIRROR): $(FAI_CONFIG) $(FAI_ETC)
+	ALL_CLASSES_WITH_PACAKGES=$$(find $(FAI_CONFIG)/package_config -type f -printf '%f\n'|grep -v .gpg|sort)
+	EXCLUDED_CLASSES=(FIREFOX GOOGLE_CHROME GAMES MATTERMOST VSCODE)
+	MIRROR_CLASSES=$$(for CLASS in $$ALL_CLASSES_WITH_PACAKGES; do \
+		if  ! [[ " $${EXCLUDED_CLASSES[@]} " =~ " $${CLASS} " ]]; then
+			echo $$CLASS;
+		fi
+	done|tr '\n' ','|sed 's/,$$//')
+	echo "Mirroring classes: $$MIRROR_CLASSES"
+	fai-mirror -C$(FAI_ETC) -c$$MIRROR_CLASSES -v $(PWD)/$(MIRROR)
 
 $(FAI_CONFIG): $(shell find $(FAI_CONFIG_DIR) -type f)
 	@echo "Copying FAI configuration..."
@@ -42,8 +53,12 @@ $(FAI_CONFIG): $(shell find $(FAI_CONFIG_DIR) -type f)
 	cp -r ${FAI_CONFIG_DIR} $(FAI_CONFIG)
 
 $(FAI_CD):  $(FAI_CONFIG) $(NFSROOT)
-	@echo "Creating FAI CD Trixie ISO..."
+	@echo "Creating FAI CD ISO..."
 	sudo fai-cd -f -C $(FAI_ETC) -M $(FAI_CD)
+
+$(FAI_CD_MIRROR):  $(FAI_CONFIG) $(NFSROOT) $(MIRROR)
+	@echo "Creating FAI CD Mirror ISO..."
+	sudo fai-cd -f -C $(FAI_ETC) -m $(PWD)/$(MIRROR) $(FAI_CD_MIRROR)
 
 $(FAI_ETC): $(shell find $(FAI_ETC_BASE) -type f)
 	@echo "Copying FAI etc directory..."
@@ -67,3 +82,7 @@ test-$(BUILDDIR)/live-%.iso: $(BUILDDIR)/live-%.iso
 test-$(FAI_CD): $(FAI_CD)
 	@echo "Testing $(FAI_CD)"
 	test-iso.sh -i $(FAI_CD)
+
+test-$(FAI_CD_MIRROR): $(FAI_CD_MIRROR)
+	@echo "Testing $(FAI_CD_MIRROR)"
+	test-iso.sh -i $(FAI_CD_MIRROR)
