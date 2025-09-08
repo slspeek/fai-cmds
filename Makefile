@@ -25,10 +25,10 @@ clean-config:
 
 init:
 	sudo apt-get update
-	sudo apt-get install extrepo
+	sudo apt-get install --yes extrepo virtinst virt-viewer reprepro
 	sudo extrepo enable fai
 	sudo apt-get update
-	sudo apt-get install fai-client fai-server libgraph-perl
+	sudo apt-get install --yes fai-client fai-server libgraph-perl
 
 profiles: $(FAI_CONFIG)
 # 	@echo "Available profiles:" 1>&2
