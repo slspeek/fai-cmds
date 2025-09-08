@@ -31,7 +31,6 @@ init:
 	sudo apt-get install --yes fai-client fai-server libgraph-perl
 
 profiles: $(FAI_CONFIG)
-# 	@echo "Available profiles:" 1>&2
 	@get-profiles.sh $(FAI_CONFIG) | sort
 
 .ONESHELL:
