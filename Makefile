@@ -25,7 +25,7 @@ clean-config:
 
 init:
 	sudo apt-get update
-	sudo apt-get install --yes extrepo virtinst virt-viewer reprepro squashfs-tools
+	sudo apt-get install --yes extrepo virtinst virt-viewer reprepro squashfs-tools libvirt-daemon
 	sudo extrepo enable fai
 	sudo apt-get update
 	sudo apt-get install --yes fai-client fai-server libgraph-perl
