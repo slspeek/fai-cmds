@@ -15,7 +15,7 @@ FAI_CD_MIRROR=$(BUILDDIR)/fai-cd-mirror.iso
 MIRROR=$(BUILDDIR)/mirror
 GNOME_LIVE=$(BUILDDIR)/live-GNOME_CORE.iso
 
-.PHONY: clean clean-config init profiles
+.PHONY: clean clean-config init profiles all-live-isos test-%
 
 clean:
 	sudo rm -rf $(BUILDDIR)
@@ -31,7 +31,7 @@ init:
 	sudo apt-get install fai-client fai-server libgraph-perl
 
 profiles: $(FAI_CONFIG)
-	@echo "Available profiles:"
+# 	@echo "Available profiles:" 1>&2
 	@get-profiles.sh $(FAI_CONFIG) | sort
 
 .ONESHELL:
@@ -86,3 +86,11 @@ test-$(FAI_CD): $(FAI_CD)
 test-$(FAI_CD_MIRROR): $(FAI_CD_MIRROR)
 	@echo "Testing $(FAI_CD_MIRROR)"
 	test-iso.sh -i $(FAI_CD_MIRROR)
+
+.ONESHELL:
+all-live-isos:
+	@for PROFILE in $$($(MAKE) --no-print-directory profiles 2>/dev/null| cut -d: -f1); do 
+		$(MAKE) "$(BUILDDIR)/live-$$PROFILE.iso"; 
+	done
+
+all: all-live-isos $(FAI_CD) $(FAI_CD_MIRROR)
