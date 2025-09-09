@@ -9,6 +9,7 @@ do
 			;;
     l)
       LIVE=true
+      ;;
 		?)
 			echo Invalid opt -${OPTARG}
 			;;
