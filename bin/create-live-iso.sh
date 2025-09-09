@@ -37,4 +37,4 @@ fi
 
 ISO_NAME="live-${PROFILE_NAME}.iso"
 echo "Creating ISO image: $ISO_NAME"
-sudo fai-cd -s500 -MH -c $FAI_CONFIG_DIR -d none -g ${FAI_ETC}/grub.cfg.live -n "${TARGET_DIR}" "$BUILD_DIR/$ISO_NAME"
+sudo fai-cd -s1500 -MH -c $FAI_CONFIG_DIR -d none -g ${FAI_ETC}/grub.cfg.live -n "${TARGET_DIR}" "$BUILD_DIR/$ISO_NAME"
