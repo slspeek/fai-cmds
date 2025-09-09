@@ -89,7 +89,7 @@ test-$(FAI_CD_MIRROR): $(FAI_CD_MIRROR)
 .ONESHELL:
 all-live-isos:
 	@for PROFILE in $$($(MAKE) --no-print-directory profiles 2>/dev/null| cut -d: -f1); do 
-		$(MAKE) "$(BUILDDIR)/live-$$PROFILE.iso"; 
+		$(MAKE) "$(BUILDDIR)/live-$$PROFILE.iso" || exit 1; 
 	done
 
 all: all-live-isos $(FAI_CD) $(FAI_CD_MIRROR)
