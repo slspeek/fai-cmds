@@ -15,13 +15,10 @@ FAI_CD_MIRROR=$(BUILDDIR)/fai-cd-mirror.iso
 MIRROR=$(BUILDDIR)/mirror
 GNOME_LIVE=$(BUILDDIR)/live-GNOME_CORE.iso
 
-.PHONY: clean clean-config init profiles all-live-isos test-%
+.PHONY: clean init profiles all-live-isos test-%
 
 clean:
 	sudo rm -rf $(BUILDDIR)
-
-clean-config:
-	rm -rf $(FAI_CONFIG)
 
 init:
 	sudo apt-get update
