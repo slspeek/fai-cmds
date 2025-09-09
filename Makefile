@@ -46,7 +46,6 @@ $(MIRROR): $(FAI_CONFIG) $(FAI_ETC)
 	fai-mirror -C$(FAI_ETC) -c$$MIRROR_CLASSES -v $(PWD)/$(MIRROR)
 
 $(FAI_CONFIG): $(shell find $(FAI_CONFIG_DIR) -type f)
-	@echo "Copying FAI configuration..."
 	mkdir -p $(BUILDDIR)
 	rm -rf $(FAI_CONFIG) || true
 	cp -r ${FAI_CONFIG_DIR} $(FAI_CONFIG)
@@ -88,7 +87,8 @@ test-$(FAI_CD_MIRROR): $(FAI_CD_MIRROR)
 
 .ONESHELL:
 all-live-isos:
-	@for PROFILE in $$($(MAKE) --no-print-directory profiles 2>/dev/null| cut -d: -f1); do 
+	@for PROFILE in $$($(MAKE) --no-print-directory profiles| cut -d: -f1); do 
+		echo "Building live-$$PROFILE.iso"
 		$(MAKE) "$(BUILDDIR)/live-$$PROFILE.iso" || exit 1; 
 	done
 
