@@ -1,12 +1,14 @@
 #!/usr/bin/env bash
 set -e
 
-while getopts "i:" opt 
+while getopts "li:" opt 
 do
 	case $opt in
 		i)
 			ISO_PATH=$OPTARG
 			;;
+    l)
+      LIVE=true
 		?)
 			echo Invalid opt -${OPTARG}
 			;;
@@ -27,11 +29,17 @@ ISO=$(basename $ISO_PATH)
 NAME=${ISO//.iso}
 VM_NAME=${NAME}-test
 
+DISK_OPTIONS="--disk size=20"
+if [ "$LIVE" = true ]; then
+  DISK_OPTIONS="--disk none"
+fi
+
 virt-install \
         --name $VM_NAME \
         --osinfo debian11 \
         --video virtio \
         --cdrom $ISO_PATH \
+        $DISK_OPTIONS \
         --memory 3048 \
         --vcpu $(( $(nproc) / 2 )) 
 virsh destroy $VM_NAME || true

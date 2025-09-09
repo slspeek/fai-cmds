@@ -76,7 +76,7 @@ $(BUILDDIR)/live-%.iso: $(FAI_CONFIG) $(FAI_ETC) $(NFSROOT)
 
 test-$(BUILDDIR)/live-%.iso: $(BUILDDIR)/live-%.iso
 	@echo "Testing live-$*.iso"
-	test-iso.sh -i "$(BUILDDIR)/live-$*.iso"
+	test-iso.sh -l -i "$(BUILDDIR)/live-$*.iso"
 
 test-$(FAI_CD): $(FAI_CD)
 	@echo "Testing $(FAI_CD)"
