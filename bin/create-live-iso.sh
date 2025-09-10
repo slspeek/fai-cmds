@@ -34,7 +34,6 @@ if ! sudo LC_ALL=C fai -v -C ${FAI_ETC} dirinstall -u $HOSTNAME -c $cl  -s file:
     echo "Continuing despite FAI installation failure due to LENIENT mode."
   fi
 fi
-
 ISO_NAME="live-${PROFILE_NAME}.iso"
 echo "Creating ISO image: $ISO_NAME"
-sudo fai-cd -s1500 -MH -c $FAI_CONFIG_DIR -d none -g ${FAI_ETC}/grub.cfg.live -n "${TARGET_DIR}" "$BUILD_DIR/$ISO_NAME"
+sudo fai-cd -fMH -c $FAI_CONFIG_DIR -d none -g ${FAI_ETC}/grub.cfg.live -n "${TARGET_DIR}" "$BUILD_DIR/$ISO_NAME"
