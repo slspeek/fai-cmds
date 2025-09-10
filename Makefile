@@ -13,9 +13,10 @@ NFSROOT=$(BUILDDIR)/nfsroot
 FAI_CD=$(BUILDDIR)/fai-cd.iso
 FAI_CD_MIRROR=$(BUILDDIR)/fai-cd-mirror.iso
 MIRROR=$(BUILDDIR)/mirror
-GNOME_LIVE=$(BUILDDIR)/live-GNOME_CORE.iso
 
-.PHONY: clean init profiles all-live-isos test-%
+.PHONY: clean init profiles
+
+.PRECIOUS: $(BUILDDIR)/live-%.iso $(FAI_CD) $(FAI_CD_MIRROR) $(MIRROR) 
 
 clean:
 	sudo rm -rf $(BUILDDIR)
@@ -67,7 +68,6 @@ $(NFSROOT): $(FAI_ETC)
 
 $(BUILDDIR)/live-%.iso: $(FAI_CONFIG) $(FAI_ETC) $(NFSROOT)
 	@echo "Creating $* live ISO..."
-	rm -f "build/live-$*.iso" || true
 	create-live-iso.sh "$*" DUTCH $(PWD)/$(FAI_CONFIG) $(FAI_ETC) $(BUILDDIR)
 
 test-$(BUILDDIR)/live-%.iso: $(BUILDDIR)/live-%.iso
