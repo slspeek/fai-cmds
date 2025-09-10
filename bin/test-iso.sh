@@ -17,12 +17,14 @@ do
 done
 
 if [ -z "$ISO_PATH" ]; then
-  echo "Usage: $0 -i <path_to_ISO>"
+  echo "Usage: $0 -i <path-to-iso> [-l]"
+  echo "  -i <path-to-iso> : Path to the ISO file to test"
+  echo "  -l               : Indicate that this is a live ISO (no disk)"
   exit 1
 fi
 
 if [ ! -f "$ISO_PATH" ]; then
-  echo "Live ISO file not found: $ISO_PATH"
+  echo "ISO file not found: $ISO_PATH"
   exit 1
 fi
 
@@ -35,6 +37,7 @@ if [ "$LIVE" = true ]; then
   DISK_OPTIONS="--disk none"
 fi
 
+
 virt-install \
         --name $VM_NAME \
         --osinfo debian11 \
@@ -43,5 +46,6 @@ virt-install \
         $DISK_OPTIONS \
         --memory 3048 \
         --vcpu $(( $(nproc) / 2 )) 
+
 virsh destroy $VM_NAME || true
 virsh undefine $VM_NAME --remove-all-storage
