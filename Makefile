@@ -44,9 +44,9 @@ $(MIRROR): $(FAI_CONFIG) $(FAI_ETC)
 	fai-mirror -C$(FAI_ETC) -c$$MIRROR_CLASSES -v $(PWD)/$(MIRROR)
 
 $(FAI_CONFIG): $(shell find $(FAI_CONFIG_DIR) -type f)
-	mkdir -p $(BUILDDIR)
-	rm -rf $(FAI_CONFIG) || true
-	cp -r ${FAI_CONFIG_DIR} $(FAI_CONFIG)
+	@mkdir -p $(BUILDDIR)
+	@rm -rf $(FAI_CONFIG) || true
+	@cp -r ${FAI_CONFIG_DIR} $(FAI_CONFIG)
 
 $(FAI_CD):  $(FAI_CONFIG) $(NFSROOT)
 	@echo "Creating FAI CD ISO..."
