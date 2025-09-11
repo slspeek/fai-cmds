@@ -3,6 +3,11 @@ export PATH:=$(PWD)/bin:$(PATH)
 
 LENIENT=1
 export LENIENT
+
+
+FAI_CD_LIVE_OPTS=
+export FAI_CD_LIVE_OPTS
+
 BUILDDIR=build
 FAI_CONFIG_DIR=$(PWD)/../fai
 FAI_CONFIG_SRC=file://$(FAI_CONFIG_DIR)
@@ -86,7 +91,11 @@ test-$(FAI_CD_MIRROR): $(FAI_CD_MIRROR)
 all-live-isos:
 	@for PROFILE in $$($(MAKE) --no-print-directory profiles| cut -d: -f1); do 
 		echo "Building live-$$PROFILE.iso"
-		$(MAKE) "$(BUILDDIR)/live-$$PROFILE.iso" || exit 1; 
+		if [ "$$PROFILE" = "gnome-compleet" ]; then 
+			$(MAKE) "$(BUILDDIR)/live-$$PROFILE.iso" FAI_CD_LIVE_OPTS="-s1000" || exit 1; 
+		else 
+			$(MAKE) "$(BUILDDIR)/live-$$PROFILE.iso" || exit 1;
+		fi 
 	done
 
 all: all-live-isos $(FAI_CD) $(FAI_CD_MIRROR)
