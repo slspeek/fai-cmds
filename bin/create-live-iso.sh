@@ -28,7 +28,8 @@ sudo mkdir -p "${TARGET_DIR}"
 if ! sudo LC_ALL=C fai -v -C ${FAI_ETC} dirinstall -u $HOSTNAME -c $cl  -s file://${FAI_CONFIG_DIR} "${TARGET_DIR}" ; then
   echo "FAI installation failed for profile: $PROFILE_NAME"
   sudo cat /var/log/fai/live-${PROFILE_NAME}/last/error.log 
-  if [ -z "$LENIENT" ]; then
+
+  if [ -z "$LENIENT" ] || [ "$LENIENT" = "0" ]; then
     exit 1
   else
     echo "Continuing despite FAI installation failure due to LENIENT mode."
