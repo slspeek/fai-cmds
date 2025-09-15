@@ -38,7 +38,7 @@ profiles: $(FAI_CONFIG)
 
 .ONESHELL:
 $(MIRROR): $(FAI_CONFIG) $(FAI_ETC)
-	ALL_CLASSES_WITH_PACAKGES=$$(find $(FAI_CONFIG)/package_config -type f -printf '%f\n'|grep -v .gpg|sort)
+	ALL_CLASSES_WITH_PACAKGES=$$(echo NONFREE;find $(FAI_CONFIG)/package_config -type f -printf '%f\n'|grep -v .gpg|sort)
 	EXCLUDED_CLASSES=(FIREFOX GOOGLE_CHROME GAMES MATTERMOST VSCODE)
 	MIRROR_CLASSES=$$(for CLASS in $$ALL_CLASSES_WITH_PACAKGES; do \
 		if  ! [[ " $${EXCLUDED_CLASSES[@]} " =~ " $${CLASS} " ]]; then
