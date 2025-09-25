@@ -38,7 +38,12 @@ profiles: $(FAI_CONFIG)
 
 .ONESHELL:
 $(MIRROR): $(FAI_CONFIG) $(FAI_ETC)
-	ALL_CLASSES_WITH_PACAKGES=$$(echo NONFREE;find $(FAI_CONFIG)/package_config -type f -printf '%f\n'|grep -v .gpg|sort)
+	DEFAULT_CLASSES=(NONFREE GRUB_EFI GRUB_PC AMD64)
+	ALL_CLASSES_WITH_PACAKGES=$$(\
+		(for C in $${DEFAULT_CLASSES[@]}; do\
+		  echo $$C;\
+	    done; \
+		find $(FAI_CONFIG)/package_config -type f -printf '%f\n')|grep -v .gpg|sort -u)
 	EXCLUDED_CLASSES=(FIREFOX GOOGLE_CHROME GAMES MATTERMOST VSCODE)
 	MIRROR_CLASSES=$$(for CLASS in $$ALL_CLASSES_WITH_PACAKGES; do \
 		if  ! [[ " $${EXCLUDED_CLASSES[@]} " =~ " $${CLASS} " ]]; then
