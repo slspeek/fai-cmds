@@ -27,12 +27,22 @@ make build/live-gnome-minimaal.iso
 ```
 ## Run installer ISO in VM
 
+### Without mirror
 ```
 make test-build/fai-cd.iso
 ```
 Or just create the ISO
 ```
 make test-build/fai-cd.iso
+```
+
+### With mirror on ISO
+```
+make test-build/fai-cd-mirror.iso
+```
+Or just create the ISO
+```
+make build/fai-cd-mirror.iso
 ```
 
 ## Test the creation of all ISOs
