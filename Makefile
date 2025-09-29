@@ -37,14 +37,14 @@ profiles: $(FAI_CONFIG)
 	@get-profiles.sh $(FAI_CONFIG) | sort
 
 .ONESHELL:
-$(MIRROR): $(FAI_CONFIG) $(FAI_ETC)
+$(MIRROR): $(shell find $(FAI_CONFIG)/package_config -type f) $(FAI_ETC)
 	DEFAULT_CLASSES=(NONFREE GRUB_EFI GRUB_PC AMD64)
 	ALL_CLASSES_WITH_PACAKGES=$$(\
 		(for C in $${DEFAULT_CLASSES[@]}; do\
 		  echo $$C;\
 	    done; \
 		find $(FAI_CONFIG)/package_config -type f -printf '%f\n')|grep -v .gpg|sort -u)
-	EXCLUDED_CLASSES=(FIREFOX GOOGLE_CHROME GAMES MATTERMOST VSCODE)
+	EXCLUDED_CLASSES=(FIREFOX GOOGLE_CHROME MATTERMOST VSCODE ELEMENT)
 	MIRROR_CLASSES=$$(for CLASS in $$ALL_CLASSES_WITH_PACAKGES; do \
 		if  ! [[ " $${EXCLUDED_CLASSES[@]} " =~ " $${CLASS} " ]]; then
 			echo $$CLASS;
@@ -57,7 +57,8 @@ $(MIRROR): $(FAI_CONFIG) $(FAI_ETC)
 $(FAI_CONFIG): $(shell find $(FAI_CONFIG_DIR) -type f)
 	@mkdir -p $(BUILDDIR)
 	@rm -rf $(FAI_CONFIG) || true
-	@cp -r ${FAI_CONFIG_DIR} $(FAI_CONFIG)
+	@cp -rp ${FAI_CONFIG_DIR} $(FAI_CONFIG)
+	@touch $(FAI_CONFIG)
 
 $(FAI_CD):  $(FAI_CONFIG) $(NFSROOT)
 	@echo "Creating FAI CD ISO..."
