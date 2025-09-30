@@ -78,7 +78,11 @@ $(NFSROOT): $(FAI_ETC)
 	@echo "Make NFS root directory..."	
 	sudo fai-make-nfsroot -C $(FAI_ETC) -f
 
-$(BUILDDIR)/live-%.iso: $(FAI_CONFIG) $(FAI_ETC) $(NFSROOT)
+$(BUILDDIR)/live-%.iso-dirinstall: $(FAI_CONFIG) $(FAI_ETC) $(NFSROOT)
+	@echo "Performing $* dirinstall..."
+	dirinstall.sh "$*" DUTCH $(PWD)/$(FAI_CONFIG) $(FAI_ETC) $(BUILDDIR)
+
+$(BUILDDIR)/live-%.iso: $(BUILDDIR)/live-%.iso-dirinstall
 	@echo "Creating $* live ISO..."
 	create-live-iso.sh "$*" DUTCH $(PWD)/$(FAI_CONFIG) $(FAI_ETC) $(BUILDDIR)
 
