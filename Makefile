@@ -21,7 +21,7 @@ MIRROR=$(BUILDDIR)/mirror
 
 .PHONY: clean init profiles
 
-.PRECIOUS: $(BUILDDIR)/live-%.iso $(FAI_CD) $(FAI_CD_MIRROR) $(MIRROR) 
+.PRECIOUS: $(BUILDDIR)/live-%.iso-dirinstall $(BUILDDIR)/live-%.iso $(FAI_CD) $(FAI_CD_MIRROR) $(MIRROR)
 
 clean:
 	sudo rm -rf $(BUILDDIR)
@@ -84,7 +84,7 @@ $(BUILDDIR)/live-%.iso-dirinstall: $(FAI_CONFIG) $(FAI_ETC) $(NFSROOT)
 
 $(BUILDDIR)/live-%.iso: $(BUILDDIR)/live-%.iso-dirinstall
 	@echo "Creating $* live ISO..."
-	create-live-iso.sh "$*" DUTCH $(PWD)/$(FAI_CONFIG) $(FAI_ETC) $(BUILDDIR)
+	create-live-iso.sh "$*" $(PWD)/$(FAI_CONFIG) $(FAI_ETC) $(BUILDDIR)
 
 test-$(BUILDDIR)/live-%.iso: $(BUILDDIR)/live-%.iso
 	@echo "Testing live-$*.iso"
