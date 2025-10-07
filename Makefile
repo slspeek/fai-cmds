@@ -18,6 +18,7 @@ NFSROOT=$(BUILDDIR)/nfsroot
 FAI_CD=$(BUILDDIR)/fai-cd.iso
 FAI_CD_MIRROR=$(BUILDDIR)/fai-cd-mirror.iso
 MIRROR=$(BUILDDIR)/mirror
+LOCAL_MIRROR=
 
 .PHONY: clean init profiles
 
@@ -73,6 +74,9 @@ $(FAI_ETC): $(shell find $(FAI_ETC_BASE) -type f)
 	mkdir -p $(BUILDDIR)
 	rm -rf $(FAI_ETC) || true
 	cp -r $(FAI_ETC_BASE) $(BUILDDIR)/
+	if [ -n "$(LOCAL_MIRROR)" ]; then \
+		sed -i 's/deb.debian.org/$(LOCAL_MIRROR)/' $(FAI_ETC)/nfsroot.conf $(FAI_ETC)/apt/sources.list; \
+	fi
 
 $(NFSROOT): $(FAI_ETC)
 	@echo "Make NFS root directory..."	
