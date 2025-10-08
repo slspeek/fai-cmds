@@ -3,7 +3,7 @@ set -e
 
 BIOS_OPTS="--boot uefi,firmware.feature0.name=secure-boot,firmware.feature0.enabled=no"
 
-while getopts "bli:" opt 
+while getopts "bli:d:" opt 
 do
 	case $opt in
     b)
@@ -15,6 +15,9 @@ do
     l)
       LIVE=true
       ;;
+    d)
+      DISK_OPTIONS=$OPTARG
+      ;;
 		?)
 			echo Invalid opt -${OPTARG}
 			;;
@@ -22,7 +25,7 @@ do
 done
 
 if [ -z "$ISO_PATH" ]; then
-  echo "Usage: $0 -i <path-to-iso> [-b (BIOS boot)] [-l (live ISO)]"
+  echo "Usage: $0 -i <path-to-iso> [-b (BIOS boot)] [-l (live ISO)] [-d <disk options>]"
   exit 1
 fi
 
@@ -35,7 +38,9 @@ ISO=$(basename $ISO_PATH)
 NAME=${ISO//.iso}
 VM_NAME=${NAME}-test
 
-DISK_OPTIONS="--disk size=20"
+if [ -z "$DISK_OPTIONS" ]; then
+  DISK_OPTIONS="--disk size=20"
+fi
 if [ "$LIVE" = true ]; then
   DISK_OPTIONS="--disk none"
 fi
