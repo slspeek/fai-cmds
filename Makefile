@@ -19,6 +19,7 @@ FAI_CD=$(BUILDDIR)/fai-cd.iso
 FAI_CD_MIRROR=$(BUILDDIR)/fai-cd-mirror.iso
 MIRROR=$(BUILDDIR)/mirror
 LOCAL_MIRROR=
+-include local-mirror.mk
 
 .PHONY: clean init profiles
 
