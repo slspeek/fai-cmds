@@ -2,3 +2,4 @@ build
 build.backup
 *.log
 local-mirror.mk
+local-mirror.mk.bak
