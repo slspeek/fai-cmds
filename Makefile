@@ -53,7 +53,7 @@ $(MIRROR): $(FAI_CONFIG) $(FAI_ETC)
 		fi
 	done|tr '\n' ','|sed 's/,$$//')
 	echo "Mirroring classes: $$MIRROR_CLASSES"
-	fai-mirror -C$(FAI_ETC) -c$$MIRROR_CLASSES -v $(PWD)/$(MIRROR)
+	fai-mirror -C$(FAI_ETC) -c$$MIRROR_CLASSES -v -I $(PWD)/$(MIRROR)
 	touch $(MIRROR)
 
 $(FAI_CONFIG): $(shell find $(FAI_CONFIG_DIR) -type f)
