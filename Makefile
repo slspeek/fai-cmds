@@ -81,7 +81,7 @@ $(FAI_ETC): $(shell find $(FAI_ETC_BASE) -type f)
 
 $(NFSROOT): $(FAI_ETC)
 	@echo "Make NFS root directory..."	
-	sudo fai-make-nfsroot -C $(FAI_ETC) -f
+	sudo fai-make-nfsroot -N -C $(FAI_ETC) -f
 
 $(BUILDDIR)/live-%.iso-dirinstall: $(FAI_CONFIG) $(FAI_ETC) $(NFSROOT)
 	@echo "Performing $* dirinstall..."
