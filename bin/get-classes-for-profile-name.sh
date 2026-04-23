@@ -9,7 +9,10 @@ if [ -z "$FAI_CONFIG" ] || [ -z "$NAME" ]; then
   exit 1
 fi
 
-get-profiles.sh $FAI_CONFIG| \
-     grep  "^$NAME:" | \
-     cut -d: -f2- |tr ' ' ','
+if CLASSES=$(get-profiles.sh $FAI_CONFIG| grep  "^$NAME:"); then
+  echo "$CLASSES" | cut -d: -f2- |tr ' ' ','
+else
+  echo "No profile found with name: $NAME" >&2
+  exit 1
+fi
      
