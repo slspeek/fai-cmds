@@ -33,6 +33,7 @@ dracut-network
 dbus
 curl lftp
 util-linux-extra
+gdisk
 less
 network-manager
 wireless-tools
