@@ -17,5 +17,3 @@ DIRINSTALL_DIR="$BUILD_DIR/live-${PROFILE_NAME}.iso-dirinstall"
 ISO_NAME="live-${PROFILE_NAME}.iso"
 echo "Creating ISO image: $ISO_NAME"
 sudo fai-cd -fMH $FAI_CD_LIVE_OPTS -c $FAI_CONFIG_DIR -d none -g ${FAI_ETC}/grub.cfg.live -n "${DIRINSTALL_DIR}" "$BUILD_DIR/$ISO_NAME"
-# Workaround for umount issues on some systems
-sudo umount "${DIRINSTALL_DIR}/media/mirror" || true
