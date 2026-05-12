@@ -1,18 +1,17 @@
 #! /usr/bin/env bash
 
 set -e
-FAI_CONFIG=$1
-NAME=$2
+fai_config=$1
+name=$2
 
-if [ -z "$FAI_CONFIG" ] || [ -z "$NAME" ]; then
+if [[ -z $fai_config || -z $name ]]; then
   echo "Usage: $0 <fai_config> <name>"
   exit 1
 fi
 
-if CLASSES=$(get-profiles.sh $FAI_CONFIG| grep  "^$NAME:"); then
-  echo "$CLASSES" | cut -d: -f2- |tr ' ' ','
+if classes=$(get-profiles.sh "$fai_config" | grep "^$name:"); then
+  echo "$classes" | cut -d: -f2- | tr ' ' ','
 else
-  echo "No profile found with name: $NAME" >&2
+  echo "No profile found with name: $name" >&2
   exit 1
 fi
-     

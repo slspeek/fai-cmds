@@ -1,60 +1,59 @@
 #!/usr/bin/env bash
 set -e
 
-BIOS_OPTS="--boot uefi,firmware.feature0.name=secure-boot,firmware.feature0.enabled=no"
+bios_opts="--boot uefi,firmware.feature0.name=secure-boot,firmware.feature0.enabled=no"
 
 while getopts "bli:d:" opt 
 do
-	case $opt in
-    b)
-      BIOS_OPTS=
+  case $opt in
+  b)
+    bios_opts=
+    ;;
+    i)
+      iso_path=$OPTARG
       ;;
-		i)
-			ISO_PATH=$OPTARG
-			;;
-    l)
-      LIVE=true
+  l)
+    live=true
+    ;;
+  d)
+    disk_options=$OPTARG
+    ;;
+    ?)
+      echo Invalid opt -${OPTARG}
       ;;
-    d)
-      DISK_OPTIONS=$OPTARG
-      ;;
-		?)
-			echo Invalid opt -${OPTARG}
-			;;
-	esac
+  esac
 done
 
-if [ -z "$ISO_PATH" ]; then
+if [ -z "$iso_path" ]; then
   echo "Usage: $0 -i <path-to-iso> [-b (BIOS boot)] [-l (live ISO)] [-d <disk options>]"
   exit 1
 fi
 
-if [ ! -f "$ISO_PATH" ]; then
-  echo "ISO file not found: $ISO_PATH"
+if [ ! -f "$iso_path" ]; then
+  echo "ISO file not found: $iso_path"
   exit 1
 fi
 
-ISO=$(basename $ISO_PATH)
-NAME=${ISO//.iso}
-VM_NAME=${NAME}-test
+iso=$(basename "$iso_path")
+name=${iso//.iso}
+vm_name=${name}-test
 
-if [ -z "$DISK_OPTIONS" ]; then
-  DISK_OPTIONS="--disk size=20"
+if [ -z "$disk_options" ]; then
+  disk_options="--disk size=20"
 fi
-if [ "$LIVE" = true ]; then
-  DISK_OPTIONS="--disk none"
+if [ "$live" = true ]; then
+  disk_options="--disk none"
 fi
-
 
 virt-install \
-        --name $VM_NAME \
-        --osinfo debian11 \
-        $BIOS_OPTS \
-        --video virtio \
-        --cdrom $ISO_PATH \
-        $DISK_OPTIONS \
-        --memory 3048 \
-        --vcpu $(( $(nproc) / 2 )) 
+    --name "$vm_name" \
+    --osinfo debian11 \
+    $bios_opts \
+    --video virtio \
+    --cdrom "$iso_path" \
+    $disk_options \
+    --memory 3048 \
+    --vcpu $(( $(nproc) / 2 )) 
 
-virsh destroy $VM_NAME || true
-virsh undefine $VM_NAME --remove-all-storage --nvram
+virsh destroy "$vm_name" || true
+virsh undefine "$vm_name" --remove-all-storage --nvram

@@ -1,19 +1,18 @@
 #! /bin/bash
 set -e
 
-PROFILE_NAME=$1
-FAI_CONFIG_DIR=$2
-FAI_ETC=$3
-BUILD_DIR=$4
+profile_name=$1
+fai_config_dir=$2
+fai_etc=$3
+build_dir=$4
 
-if [ -z "$PROFILE_NAME" ] || [ -z "$FAI_CONFIG_DIR" ] || [ -z "$FAI_ETC" ] || [ -z "$BUILD_DIR" ]; then
+if [[ -z $profile_name || -z $fai_config_dir || -z $fai_etc || -z $build_dir ]]; then
   echo "Usage: $0 <profile_name> <fai_config_dir> <fai_etc> <build_dir>"
   exit 1
 fi
 
-DIRINSTALL_DIR="$BUILD_DIR/live-${PROFILE_NAME}.iso-dirinstall"
+dirinstall_dir="$build_dir/live-${profile_name}.iso-dirinstall"
+iso_name="live-${profile_name}.iso"
 
-
-ISO_NAME="live-${PROFILE_NAME}.iso"
-echo "Creating ISO image: $ISO_NAME"
-sudo fai-cd -fMH $FAI_CD_LIVE_OPTS -c $FAI_CONFIG_DIR -d none -g ${FAI_ETC}/grub.cfg.live -n "${DIRINSTALL_DIR}" "$BUILD_DIR/$ISO_NAME"
+echo "Creating ISO image: $iso_name"
+sudo fai-cd -fMH $FAI_CD_LIVE_OPTS -c $fai_config_dir -d none -g ${fai_etc}/grub.cfg.live -n "${dirinstall_dir}" "$build_dir/$iso_name"

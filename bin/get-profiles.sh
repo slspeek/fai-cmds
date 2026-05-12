@@ -1,11 +1,15 @@
 #! /usr/bin/env bash
 
 set -e
-FAI_CONFIG=$1
+fai_config=$1
+if [[ -z $fai_config ]]; then
+  echo "Usage: $0 <fai_config>"
+  exit 1
+fi
 
-for PROFILE in "$FAI_CONFIG"/class/*.profile;
+for profile in "$fai_config"/class/*.profile;
 do 
-  cat "$PROFILE"
+  cat "$profile"
   echo
 done| \
   awk '

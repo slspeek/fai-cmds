@@ -1,12 +1,15 @@
 #! /bin/bash
 set -e
 
-FAI_CONFIG_DIR=$1
-CLASSES=$2
-
+fai_config_dir=$1
+classes=$2
+if [[ -z $fai_config_dir || -z $classes ]]; then
+    echo "Usage: $0 <fai_config_dir> <classes>"
+    exit 1
+fi
 
 temp_log_dir=$(mktemp -d)
- (echo $CLASSES|tr ',' '\n') > ${temp_log_dir}/FAI_CLASSES
-(export FAI=$FAI_CONFIG_DIR; export LOGDIR=$temp_log_dir; fai-deps)
-cat ${temp_log_dir}/FAI_CLASSES|tr '\n' ','| sed 's/,$//'
-rm -rf ${temp_log_dir}
+(echo "$classes" | tr ',' '\n') > "${temp_log_dir}/FAI_CLASSES"
+(export FAI="$fai_config_dir"; export LOGDIR="$temp_log_dir"; fai-deps)
+cat "${temp_log_dir}/FAI_CLASSES" | tr '\n' ',' | sed 's/,$//'
+rm -rf "${temp_log_dir}"

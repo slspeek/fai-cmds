@@ -1,33 +1,33 @@
 #! /bin/bash
 set -e
 
-PROFILE_NAME=$1
-LANGUAGE=$2
-FAI_CONFIG_DIR=$3
-FAI_ETC=$4
-BUILD_DIR=$5
+profile_name=$1
+language=$2
+fai_config_dir=$3
+fai_etc=$4
+build_dir=$5
 
-if [[ -z $PROFILE_NAME || -z $LANGUAGE || -z $FAI_CONFIG_DIR || -z $FAI_ETC || -z $BUILD_DIR ]]; then
+if [[ -z $profile_name || -z $language || -z $fai_config_dir || -z $fai_etc || -z $build_dir ]]; then
   echo "Usage: $0 <profile_name> <language> <fai_config_dir> <fai_etc> <build_dir>"
   exit 1
 fi
 
-TARGET_DIR="$BUILD_DIR/live-${PROFILE_NAME}.iso-dirinstall"
-cl_for_profile="$(bin/get-classes-for-profile-name.sh $FAI_CONFIG_DIR "$PROFILE_NAME")"
+target_dir="$build_dir/live-${profile_name}.iso-dirinstall"
+cl_for_profile="$(bin/get-classes-for-profile-name.sh $fai_config_dir "$profile_name")"
 cl_unexpanded="$(echo "$cl_for_profile" | \
-  sed -e 's/INSTALL,//'),${LANGUAGE},DHCPC,TRIXIE64,AMD64,STANDARD,TRIXIE,LIVEISO,LAST"
-cl=$(bin/fai-deps-wrapper.sh $FAI_CONFIG_DIR "$cl_unexpanded")
+  sed -e 's/INSTALL,//'),${language},DHCPC,TRIXIE64,AMD64,STANDARD,TRIXIE,LIVEISO,LAST"
+cl=$(bin/fai-deps-wrapper.sh $fai_config_dir "$cl_unexpanded")
 if [ -z "$cl" ]; then
-  echo "No classes found for profile: $PROFILE_NAME"
+  echo "No classes found for profile: $profile_name"
   exit 1
 fi
-HOSTNAME="live-${PROFILE_NAME}"
-echo -e "Installing FAI configuration for $HOSTNAME with\nclasses: $cl"
-sudo rm -rf "${TARGET_DIR}"
-sudo mkdir -p "${TARGET_DIR}"
-if ! sudo LC_ALL=C fai -v -C ${FAI_ETC} dirinstall -u $HOSTNAME -c $cl  -s file://${FAI_CONFIG_DIR} "${TARGET_DIR}" ; then
-  echo "FAI installation failed for profile: $PROFILE_NAME"
-  sudo cat /var/log/fai/live-${PROFILE_NAME}/last/error.log 
+hostname="live-${profile_name}"
+echo -e "Installing FAI configuration for $hostname with\nclasses: $cl"
+sudo rm -rf "${target_dir}"
+sudo mkdir -p "${target_dir}"
+if ! sudo LC_ALL=C fai -v -C ${fai_etc} dirinstall -u $hostname -c $cl  -s file://${fai_config_dir} "${target_dir}" ; then
+  echo "FAI installation failed for profile: $profile_name"
+  sudo cat /var/log/fai/live-${profile_name}/last/error.log 
 
   if [ -z "$LENIENT" ] || [ "$LENIENT" = "0" ]; then
     exit 1
