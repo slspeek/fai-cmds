@@ -47,6 +47,7 @@ dialog
 console-common kbd
 xz-utils pigz zstd
 gpg
+btrfs-progs
 
 
 # some network cards needs firmware
