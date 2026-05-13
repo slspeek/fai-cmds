@@ -14,8 +14,10 @@ fi
 
 target_dir="$build_dir/live-${profile_name}.iso-dirinstall"
 cl_for_profile="$(bin/get-classes-for-profile-name.sh $fai_config_dir "$profile_name")"
+# Haal INSTALL, MIRROR en BTRFS_ONE weg uit de klassenlijst, want die wil niet in een live image hebben.
+# Voeg daarna de standaardklassen toe die nodig zijn voor een live image.
 cl_unexpanded="$(echo "$cl_for_profile" | \
-  sed -e 's/INSTALL,//'),${language},DHCPC,TRIXIE64,AMD64,STANDARD,TRIXIE,LIVEISO,LAST"
+  sed -e 's/INSTALL,//; s/MIRROR,//; s/BTRFS_ONE,//'),${language},DHCPC,TRIXIE64,AMD64,STANDARD,TRIXIE,LIVEISO,LAST"
 cl=$(bin/fai-deps-wrapper.sh $fai_config_dir "$cl_unexpanded")
 if [ -z "$cl" ]; then
   echo "No classes found for profile: $profile_name"
