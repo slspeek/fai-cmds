@@ -51,4 +51,4 @@ make build/fai-cd-mirror.iso
 make clean
 time make all LENIENT=0 2>&1 | tee make-all-NOT-LENIENT.log
 ```
-Requires 50Gb disk space and at least one hour.
+Requires 120Gb  disk space and at least two and a half hours.
