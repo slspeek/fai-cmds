@@ -114,4 +114,4 @@ all-live-isos:
 		fi 
 	done
 
-all: all-live-isos $(FAI_CD) $(FAI_CD_MIRROR)
+all: $(FAI_CD) $(FAI_CD_MIRROR) all-live-isos
