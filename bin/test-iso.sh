@@ -53,6 +53,7 @@ virt-install \
     --cdrom "$iso_path" \
     $disk_options \
     --memory 3048 \
+    --channel type=spiceport,source.channel=org.spice-space.webdav.0,target.type=virtio,target.name=org.spice-space.webdav.0 \
     --vcpu $(( $(nproc) / 2 )) 
 
 virsh destroy "$vm_name" || true
