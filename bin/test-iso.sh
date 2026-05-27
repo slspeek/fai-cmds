@@ -9,18 +9,18 @@ do
   b)
     bios_opts=
     ;;
-    i)
-      iso_path=$OPTARG
-      ;;
+  i)
+    iso_path=$OPTARG
+    ;;
   l)
     live=true
     ;;
   d)
     disk_options=$OPTARG
     ;;
-    ?)
-      echo Invalid opt -${OPTARG}
-      ;;
+  ?)
+    echo Invalid opt -${OPTARG}
+    ;;
   esac
 done
 
