@@ -35,9 +35,13 @@ if [ ! -f "$iso_path" ]; then
 fi
 
 iso=$(basename "$iso_path")
-name=${iso//.iso}
-vm_name=${name}-test
 
+if [ -n "$VM_NAME" ]; then
+  vm_name="$VM_NAME-$(date +%Y%m%d-%H%M)"
+else
+  name=${iso//.iso}
+  vm_name=${name}-test-$(date +%Y%m%d-%H%M)
+fi
 if [ -z "$disk_options" ]; then
   disk_options="--disk size=20"
 fi
@@ -56,5 +60,7 @@ virt-install \
     --channel type=spiceport,source.channel=org.spice-space.webdav.0,target.type=virtio,target.name=org.spice-space.webdav.0 \
     --vcpu $(( $(nproc) / 2 )) 
 
-virsh destroy "$vm_name" || true
-virsh undefine "$vm_name" --remove-all-storage --nvram
+if [ -z "$VM_KEEP" ] || [ "$VM_KEEP" = "0" ]; then
+  virsh destroy "$vm_name" || true
+  virsh undefine "$vm_name" --remove-all-storage --nvram
+fi
