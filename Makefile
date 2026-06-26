@@ -103,6 +103,18 @@ test-$(FAI_CD_MIRROR): $(FAI_CD_MIRROR)
 	@echo "Testing $(FAI_CD_MIRROR)"
 	test-iso.sh -i $(FAI_CD_MIRROR)
 
+test-legacy-$(BUILDDIR)/live-%.iso: $(BUILDDIR)/live-%.iso
+	@echo "Testing live-$*.iso"
+	test-iso.sh -b -l -i "$(BUILDDIR)/live-$*.iso"
+
+test-legacy-$(FAI_CD): $(FAI_CD)
+	@echo "Testing $(FAI_CD)"
+	test-iso.sh -b -i $(FAI_CD)
+
+test-legacy-$(FAI_CD_MIRROR): $(FAI_CD_MIRROR)
+	@echo "Testing $(FAI_CD_MIRROR)"
+	test-iso.sh -b -i $(FAI_CD_MIRROR)
+
 .ONESHELL:
 all-live-isos:
 	@for PROFILE in $$($(MAKE) --no-print-directory profiles| cut -d: -f1); do 
