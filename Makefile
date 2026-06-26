@@ -76,7 +76,7 @@ $(FAI_ETC): $(shell find $(FAI_ETC_BASE) -type f)
 	rm -rf $(FAI_ETC) || true
 	cp -r $(FAI_ETC_BASE) $(BUILDDIR)/
 	if [ -n "$(LOCAL_MIRROR)" ]; then \
-		sed -i 's/deb.debian.org/$(LOCAL_MIRROR)/' $(FAI_ETC)/nfsroot.conf $(FAI_ETC)/apt/sources.list; \
+		sed -i 's/deb.debian.org/$(LOCAL_MIRROR)/;s/security.debian.org/$(LOCAL_MIRROR)/' $(FAI_ETC)/nfsroot.conf $(FAI_ETC)/apt/sources.list; \
 	fi
 
 $(NFSROOT): $(FAI_ETC)
