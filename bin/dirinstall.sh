@@ -17,7 +17,7 @@ cl_for_profile="$(bin/get-classes-for-profile-name.sh $fai_config_dir "$profile_
 # Haal INSTALL, MIRROR en BTRFS_ONE weg uit de klassenlijst, want die wil niet in een live image hebben.
 # Voeg daarna de standaardklassen toe die nodig zijn voor een live image.
 cl_unexpanded="$(echo "$cl_for_profile" | \
-  sed -e 's/INSTALL,//; s/MIRROR,//; s/BTRFS_ONE,//; s/UNATTENDED_UPGRADES,//'),${language},DHCPC,TRIXIE64,AMD64,STANDARD,TRIXIE,LIVEISO,LAST"
+  sed -e 's/INSTALL,//; s/DEBIAN_MIRROR,//; s/BTRFS_ONE,//; s/UNATTENDED_UPGRADES,//'),${language},DHCPC,TRIXIE64,AMD64,STANDARD,TRIXIE,LIVEISO,LAST"
 cl=$(bin/fai-deps-wrapper.sh $fai_config_dir "$cl_unexpanded")
 if [ -z "$cl" ]; then
   echo "No classes found for profile: $profile_name"
