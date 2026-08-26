@@ -1,0 +1,7 @@
+Package: fai-client fai-nfsroot fai-setup-storage
+Pin: version 6.6
+Pin-Priority: 1001
+
+Package: fai-server
+Pin: version 6.6
+Pin-Priority: 1001
