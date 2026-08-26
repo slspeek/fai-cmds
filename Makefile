@@ -4,9 +4,10 @@ export PATH:=$(PWD)/bin:$(PATH)
 LENIENT=1
 export LENIENT
 
-
 FAI_CD_LIVE_OPTS=
 export FAI_CD_LIVE_OPTS
+
+FAI_VERSION=6.6
 
 BUILDDIR=build
 FAI_CONFIG_DIR=$(PWD)/../fai
@@ -30,10 +31,20 @@ clean:
 
 init:
 	sudo apt-get update
-	sudo apt-get install --yes extrepo virtinst virt-viewer reprepro squashfs-tools libvirt-daemon
+	sudo apt-get install --yes \
+		extrepo \
+		virtinst \
+		virt-viewer \
+		reprepro \
+		squashfs-tools \
+		libvirt-daemon \
+		libgraph-perl
 	sudo extrepo enable fai
 	sudo apt-get update
-	sudo apt-get install --yes fai-client fai-server libgraph-perl
+	sudo apt-get install --yes \
+		fai-client=$(FAI_VERSION) \
+		fai-server=$(FAI_VERSION)
+	sudo apt-mark hold fai-client fai-server
 
 profiles: $(FAI_CONFIG)
 	@get-profiles.sh $(FAI_CONFIG) | sort
