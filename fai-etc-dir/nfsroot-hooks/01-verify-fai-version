@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+set -e
+for pkg in fai-nfsroot fai-setup-storage fai-client; do
+    $ROOTCMD sh -c "dpkg -l |grep $pkg|grep --quiet '\b6.6\b'  ||
+     echo Package $pkg is not installed or not version 6.6 >&2"
+done
