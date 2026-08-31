@@ -1,5 +1,5 @@
 Types: deb
-URIs: https://fai-project.org/download
+URIs: http://fai-project.org/download
 Suites: trixie
 Components: koeln
 Enabled: yes
